@@ -1,0 +1,104 @@
+<div class="details">
+<h5>Name: <%= @user.name%></h5>
+<h5>Department: <%= @user.department%></h5>
+<h5>Designation: <%= @user.title%></h5>
+<h5>Mobile No: <%= @user.mobile%></h5>
+
+
+<% if @pics_url!="Nothing" %>
+<h2>Uploads</h2>
+<% @pics_url.each do |pics_url| %>
+<div class="picture">
+<%= image_tag pics_url["url"] ,:size => '300x300'%>
+<h5><%= pics_url["caption"] %></h5>
+
+<h5><%= pics_url["desc"]%></h5>
+</div>
+<% end %>
+<% end %>
+
+
+<% if @status_reports!="Nothing" %>
+<h2>Status Reports</h2>
+<% @status_reports.each do |status_report| %>
+<div class="status">
+<h4>DATE: <%= status_report["date"] %></h4>
+<h5>NAME: <%= status_report["clientName"] %></h5>
+<h5>CLIENT LOCATION:<%= status_report["clientLocation"] %></h5>
+<h5>STATUS: <%= status_report["status"] %></h5>
+</div>
+<% end %>
+<% end %>
+
+<% if @meeting!="Nothing" %>
+<h2>Employee Meetings</h2>
+<% @meeting.each do |meeting| %>
+<div class="status">
+<h4>Date: <%= meeting["date"] %></h4>
+<h5>Name: <%= meeting["clientn"] %></h5>
+<h5>Designated time:<%= meeting["time"] %></h5>
+<h5>Activity: <%= meeting["activity"] %></h5>
+<h5>Punch-In: <%= meeting["start"]%></h5>
+<h5>Punch-Out: <%= meeting["end"]%></h5>
+<h5>Location: <%= meeting["location"]%></h5>
+</div>
+<% end %>
+<% end %>
+
+<% if @usermeeting!="Nothing" %>
+<h2>User Uploaded Meetings</h2>
+<% @usermeeting.each do |umeeting| %>
+<% if umeeting["approve"]=="false" %>
+<div class="status">
+<h4>Date: <%= umeeting["date"] %></h4>
+<h5>Name: <%= umeeting["clientn"] %></h5>
+<h5>Designated time:<%= umeeting["time"] %></h5>
+<h5>Activity: <%= umeeting["activity"] %></h5>
+<div class="button">
+<%= button_to "Approve", action: "confirm", :date => umeeting["date"],:name => umeeting["clientn"],:time => umeeting["time"],:activity => umeeting["activity"],:id => @user.push_id%>
+</div>
+</div>
+<% end %>
+<%end%>
+<% end %>
+
+</div>
+
+
+<% provide(:button_text, 'Submit Meeting Details') %>
+<h1>Send Meeting Details</h1>
+
+<div class="row">
+  <div class="col-md-2 col-md-offset-1">
+    
+  <%= form_tag "/submit" do %>
+  <div class="field">
+  <%= label_tag :Client_Name %>
+  <%= text_field_tag :Client_Name %>
+  </div>
+  <div class="field">
+   <%= label_tag :Date %>
+  <%= text_field_tag :Date %>
+  </div>
+   <div class="field">
+  <%= label_tag :Activity %>
+  <%= text_field_tag :Activity %>
+  </div> 
+  <div class="field">
+  <%= label_tag :Time %>
+  <%= text_field_tag :Time%>
+  </div>
+  <%= hidden_field_tag :id ,  @user.push_id %>
+ 
+ <div class="button">
+  <%= submit_tag yield(:button_text), class: "btn btn-primary" %>
+  </div>
+<% end %>
+
+  </div>
+</div>
+
+
+
+
+
